@@ -1,21 +1,28 @@
-import 'package:flutter/material.dart';
-import 'package:timeago/timeago.dart' as timeago;
+// lib/widgets/job_card.dart
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:timeago/timeago.dart' as timeago;
+import '../controllers/saved_jobs_controller.dart';
 
 class JobCard extends StatelessWidget {
   final Map<String, dynamic> jobData;
-  final bool isSaved;
-  final VoidCallback onSave;
+  final String jobId;
 
   const JobCard({
     super.key,
     required this.jobData,
-    required this.onSave,
-    this.isSaved = false,
+    required this.jobId,
   });
 
   @override
   Widget build(BuildContext context) {
+    // Слушаем глобальную модель
+    final ctrl = context.watch<SavedJobsController>();
+    final isSaved = ctrl.savedIds.contains(jobId);
+
+    // парсим данные
     final imageUrl = jobData['imageUrl'] as String? ?? '';
     final title = jobData['title'] as String? ?? '';
     final company = jobData['company'] as String? ?? '';
@@ -36,86 +43,70 @@ class JobCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // — HEADER ROW —
+          // Заголовок + кнопка
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: imageUrl.isNotEmpty
-                    ? Image.network(
-                  imageUrl,
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
-                )
+                    ? Image.network(imageUrl, width: 50, height: 50, fit: BoxFit.cover)
                     : Container(
-                  width: 50,
-                  height: 50,
-                  color: Colors.grey[300],
+                  width: 50, height: 50, color: Colors.grey[300],
                   child: const Icon(Icons.image, color: Colors.grey),
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF001A31),
+                        )),
+                    const SizedBox(height: 4),
+                    Text('$company · $location',
+                        style: TextStyle(color: Colors.grey[700])),
+                  ],
+                ),
+              ),
               IconButton(
                 iconSize: 40,
-                icon: Icon(
-                  isSaved ? Icons.bookmark : Icons.bookmark_border,
-                  size: 35,
-                  color: isSaved ? Colors.orange : Colors.grey,
-                ),
-                onPressed: onSave,
+                icon: Icon(isSaved ? Icons.bookmark : Icons.bookmark_border,
+                    color: isSaved ? Colors.orange : Colors.grey),
+                onPressed: () => ctrl.toggle(jobId),
               ),
             ],
           ),
 
           const SizedBox(height: 12),
-          // — TITLE —
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
 
-          const SizedBox(height: 4),
-          // — COMPANY · LOCATION —
-          Text(
-            '$company · $location',
-            style: TextStyle(color: Colors.grey[700]),
-          ),
-
-          const SizedBox(height: 12),
-          // — TAGS —
+          // Теги
           Wrap(
             spacing: 8,
             runSpacing: 6,
             children: tags
                 .map((tag) => Container(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 12, vertical: 6),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
                 color: const Color(0xFFF1F1F1),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Text(
-                tag,
-                style: const TextStyle(fontSize: 13),
-              ),
+              child: Text(tag, style: const TextStyle(fontSize: 13)),
             ))
                 .toList(),
           ),
 
           const SizedBox(height: 12),
-          // — FOOTER ROW: timeAgo + salary —
+
+          // Нижняя строка
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                timeAgo,
-                style: TextStyle(color: Colors.grey[600]),
-              ),
+              Text(timeAgo, style: TextStyle(color: Colors.grey[600])),
               RichText(
                 text: TextSpan(
                   children: [
@@ -129,10 +120,7 @@ class JobCard extends StatelessWidget {
                     ),
                     TextSpan(
                       text: '$currency/Mo',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                     ),
                   ],
                 ),

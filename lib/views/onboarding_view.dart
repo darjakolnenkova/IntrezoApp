@@ -1,68 +1,17 @@
-import 'package:flutter/material.dart';
-import 'home_screen.dart';
+// lib/views/onboarding_view.dart
 
-class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+import 'package:flutter/material.dart';
+import '../controllers/onboarding_controller.dart';
+
+class OnboardingView extends StatefulWidget {
+  const OnboardingView({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  State<OnboardingView> createState() => _OnboardingViewState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
-  final PageController _controller = PageController();
-  int _currentPage = 0;
-
-  final List<Map<String, String>> onboardingData = [
-    {
-      "image": "assets/images/onboarding1.png",
-      "title": "Explore verified job opportunities",
-      "subtitle":
-      "Access only trusted and legal job offers from reliable employers in Estonia – with clear terms, safe conditions, and full transparency.",
-    },
-    {
-      "image": "assets/images/onboarding2.png",
-      "title": "Apply in one click",
-      "subtitle":
-      "No complicated process – just a short form, and we’ll take it from there.",
-    },
-    {
-      "image": "assets/images/onboarding3.png",
-      "title": "Full support at every step of the way",
-      "subtitle":
-      "We provide full support with documents, visas, and relocation - making sure every step is simple, clear, and taken care of for you.",
-    },
-    {
-      "image": "assets/images/onboarding1.png",
-      "title": "Start a new life with confidence",
-      "subtitle":
-      "Secure an official job in Estonia with stable income and clear conditions.",
-    },
-  ];
-
-  void _nextPage() {
-    if (_currentPage < onboardingData.length - 1) {
-      _controller.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
-
-  void _previousPage() {
-    if (_currentPage > 0) {
-      _controller.previousPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-    }
-  }
-
-  void _getStarted() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-    );
-  }
+class _OnboardingViewState extends State<OnboardingView> {
+  final _ctrl = OnboardingController();
 
   @override
   Widget build(BuildContext context) {
@@ -71,21 +20,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Pagination Dots — top left
+            // — Pagination Dots (top left) —
             Container(
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.only(left: 24, top: 40, bottom: 40),
               child: Row(
                 children: List.generate(
-                  onboardingData.length,
+                  _ctrl.data.length,
                       (index) => AnimatedContainer(
                     duration: const Duration(milliseconds: 400),
                     curve: Curves.easeInOutBack,
                     margin: const EdgeInsets.only(right: 8),
-                    width: _currentPage == index ? 60 : 8,
+                    width: _ctrl.currentPage == index ? 60 : 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      color: _currentPage == index
+                      color: _ctrl.currentPage == index
                           ? const Color(0xFFD8D3CD)
                           : Colors.transparent,
                       border: Border.all(
@@ -93,7 +42,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         width: 2,
                       ),
                       borderRadius: BorderRadius.circular(
-                        _currentPage == index ? 20 : 4,
+                        _ctrl.currentPage == index ? 20 : 4,
                       ),
                     ),
                   ),
@@ -101,31 +50,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
 
-
-
-            // Main PageView
+            // — PageView with onboarding cards —
             Expanded(
               child: PageView.builder(
-                controller: _controller,
-                itemCount: onboardingData.length,
+                controller: _ctrl.pageController,
+                itemCount: _ctrl.data.length,
                 onPageChanged: (index) {
-                  setState(() {
-                    _currentPage = index;
-                  });
+                  setState(() => _ctrl.onPageChanged(index));
                 },
                 itemBuilder: (context, index) {
+                  final item = _ctrl.data[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        // ограничим максимальную высоту карточки, если экран маленький
-                        double maxCardHeight = constraints.maxHeight * 0.8;
-
+                        final maxCardHeight = constraints.maxHeight * 0.8;
                         return Center(
                           child: Container(
-                            constraints: BoxConstraints(
-                              maxHeight: maxCardHeight,
-                            ),
+                            constraints:
+                            BoxConstraints(maxHeight: maxCardHeight),
                             decoration: BoxDecoration(
                               color: const Color(0xFFD8D3CD),
                               borderRadius: BorderRadius.circular(20),
@@ -137,14 +80,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 const SizedBox(height: 70),
                                 Center(
                                   child: Image.asset(
-                                    onboardingData[index]["image"]!,
+                                    item["image"]!,
                                     height: 200,
                                     fit: BoxFit.contain,
                                   ),
                                 ),
                                 const SizedBox(height: 50),
                                 Text(
-                                  onboardingData[index]["title"]!,
+                                  item["title"]!,
                                   style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -153,7 +96,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 ),
                                 const SizedBox(height: 12),
                                 Text(
-                                  onboardingData[index]["subtitle"]!,
+                                  item["subtitle"]!,
                                   style: const TextStyle(
                                     fontSize: 15,
                                     color: Colors.black87,
@@ -170,23 +113,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
 
-
-
-            // Navigation Buttons
+            // — Navigation Buttons (BACK / NEXT / GET STARTED) —
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 24, 24, 36),
               child: Row(
                 children: [
-                  if (_currentPage > 0)
+                  if (_ctrl.currentPage > 0)
                     Expanded(
                       child: OutlinedButton(
-                        onPressed: _previousPage,
+                        onPressed: () {
+                          setState(() => _ctrl.previous());
+                        },
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(
                             color: Color(0xFFD8D3CD),
-                            width: 2.0,
+                            width: 2,
                           ),
-                          foregroundColor: Color(0xFFD8D3CD),
+                          foregroundColor: const Color(0xFFD8D3CD),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -195,14 +138,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         child: const Text("BACK"),
                       ),
                     ),
-                  if (_currentPage > 0) const SizedBox(width: 12),
+                  if (_ctrl.currentPage > 0) const SizedBox(width: 12),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: _currentPage == onboardingData.length - 1
-                          ? _getStarted
-                          : _nextPage,
+                      onPressed: () {
+                        if (_ctrl.currentPage == _ctrl.data.length - 1) {
+                          // Переходим на главный экран, очищая стек навигации
+                          _ctrl.getStarted(context);
+                        } else {
+                          setState(() => _ctrl.next());
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFD8D3CD),
+                        backgroundColor: const Color(0xFFD8D3CD),
                         foregroundColor: const Color(0xFF001A31),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -210,9 +158,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 14),
                       ),
                       child: Text(
-                        _currentPage == onboardingData.length - 1 ? "GET STARTED" : "NEXT",
+                        _ctrl.currentPage == _ctrl.data.length - 1
+                            ? "GET STARTED"
+                            : "NEXT",
                         style: TextStyle(
-                          decoration: _currentPage == onboardingData.length - 1
+                          decoration: _ctrl.currentPage ==
+                              _ctrl.data.length - 1
                               ? TextDecoration.underline
                               : TextDecoration.none,
                           fontWeight: FontWeight.w600,
@@ -222,8 +173,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ],
               ),
-            )
-
+            ),
           ],
         ),
       ),
