@@ -18,6 +18,8 @@ dependencies:
   timeago: ^3.5.0
   shared_preferences: ^2.1.1  # ← для локальных избранных
   provider: ^6.0.5
+  url_launcher: ^6.1.7
+  share_plus: ^11.0.0
 
 
   cupertino_icons: ^1.0.8
@@ -42,7 +44,6 @@ flutter:
     - assets/images/onboarding3.png
     - assets/images/onboarding1.png
     - assets/images/miniintrezo.png
-
-
-
-
+    - assets/images/whatsapp.png
+    - assets/images/viber.png
+    - assets/images/about.png

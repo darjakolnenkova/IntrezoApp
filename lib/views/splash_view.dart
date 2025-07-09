@@ -1,4 +1,7 @@
+// lib/views/splash_view.dart
+
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../controllers/splash_controller.dart';
 import 'onboarding_view.dart';
 import 'main_screen.dart';
@@ -11,8 +14,6 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-  final _controller = SplashController();
-
   @override
   void initState() {
     super.initState();
@@ -20,7 +21,9 @@ class _SplashViewState extends State<SplashView> {
   }
 
   Future<void> _navigateNext() async {
-    final showOnboarding = await _controller.checkFirstLaunch();
+    // Берём контроллер из провайдера
+    final ctl = context.read<SplashController>();
+    final showOnboarding = await ctl.checkFirstLaunch();
     if (!mounted) return;
 
     if (showOnboarding) {

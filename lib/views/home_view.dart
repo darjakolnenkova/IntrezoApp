@@ -47,7 +47,7 @@ class _HomeViewState extends State<HomeView> {
         final docs = snap.data?.docs ?? [];
         return ListView.builder(
           key: const PageStorageKey('jobsList'),
-          padding: const EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.only(bottom: 5),
           itemCount: docs.length + 1,
           itemBuilder: (c, i) {
             if (i == 0) {

@@ -1,9 +1,9 @@
-// lib/views/main_screen.dart
-
 import 'package:flutter/material.dart';
 import '../widgets/bottom_nav_bar.dart';
 import 'home_view.dart';
 import 'saved_view.dart';
+import 'contact_view.dart';
+import 'menu_view.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,11 +16,16 @@ class _MainScreenState extends State<MainScreen> {
   static const _screens = [
     HomeView(),
     SavedView(),
+    ContactView(),
+    MenuView(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // фон всего приложения
+      backgroundColor: const Color(0xFFD8D3CD),
+
       // Общий AppBar для всех экранов
       appBar: AppBar(
         backgroundColor: const Color(0xFF001A31),
@@ -32,11 +37,13 @@ class _MainScreenState extends State<MainScreen> {
           height: 150,
         ),
       ),
+
       // Переключаем контент, но не пересоздаём экраны
       body: IndexedStack(
         index: _currentIndex,
         children: _screens,
       ),
+
       bottomNavigationBar: BottomNavBar(
         activeIndex: _currentIndex,
         onTap: (i) => setState(() => _currentIndex = i),

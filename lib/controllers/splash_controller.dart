@@ -1,9 +1,13 @@
+// lib/controllers/splash_controller.dart
+
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SplashController {
-  /// Ждём, проверяем флаг, устанавливаем его и возвращаем, был ли это первый запуск
+/// Контроллер сплэша: проверяет, был ли первый запуск приложения.
+class SplashController extends ChangeNotifier {
+  /// Проверяет, первый ли это запуск, и ставит флаг в SharedPreferences.
   Future<bool> checkFirstLaunch() async {
-    // Делаем задержку для показа Splash
+    // Делаем задержку, чтобы сплэш был виден
     await Future.delayed(const Duration(milliseconds: 3000));
 
     final prefs = await SharedPreferences.getInstance();
@@ -14,9 +18,10 @@ class SplashController {
     final seen = prefs.getBool('seenOnboarding') ?? false;
 
     if (!seen) {
-      // первый запуск — запомним, что уже видели онбординг
+      // Сохраняем, что онбординг уже показывали
       await prefs.setBool('seenOnboarding', true);
     }
+    // Возвращаем true, если нужно показать онбординг (то есть если ещё не видели)
     return !seen;
   }
 }

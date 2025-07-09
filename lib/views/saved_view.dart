@@ -10,10 +10,10 @@ class SavedView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ctrl = context.watch<SavedJobsController>();
-    final savedIds = ctrl.savedIds;
+    final savedIds = ctrl.savedIds.toList();
 
     return Scaffold(
-      backgroundColor: Color(0xFFD8D3CD),
+      backgroundColor: const Color(0xFFD8D3CD),
       extendBody: true,
       body: savedIds.isEmpty
           ? _buildEmptyState()
@@ -50,13 +50,15 @@ class SavedView extends StatelessWidget {
           },
         ),
       ),
-      bottomNavigationBar: _buildFooter(context, ctrl),
+      bottomNavigationBar: Visibility(
+        visible: savedIds.isNotEmpty,
+        child: _buildFooter(context, ctrl),
+      ),
     );
   }
 
   Widget _buildEmptyState() {
     return Container(
-      color: const Color(0xFFD8D3CD),
       alignment: Alignment.center,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -87,7 +89,7 @@ class SavedView extends StatelessWidget {
   Widget _buildFooter(BuildContext context, SavedJobsController ctrl) {
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 8, 24, 8),
-      color: Color(0xFFD8D3CD),
+      color: const Color(0xFFD8D3CD),
       child: Row(
         children: [
           GestureDetector(

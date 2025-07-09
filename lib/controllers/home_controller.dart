@@ -1,17 +1,27 @@
+import 'package:flutter/foundation.dart';
 import '../services/firestore_service.dart';
 import '../services/shared_prefs_service.dart';
 import '../models/job.dart';
 
-class HomeController {
-  final _fs = FirestoreService();
-  final _prefs = SharedPrefsService();
+class HomeController extends ChangeNotifier {
+  final FirestoreService _fs;
+  final SharedPrefsService _prefs;
 
   List<String> filters = ['Newest', 'Oldest', 'Salary ↑', 'Salary ↓'];
   String selectedFilter = 'Newest';
   Set<String> savedIds = {};
 
-  Future<void> init() async {
+  HomeController({
+    FirestoreService? firestoreService,
+    SharedPrefsService? sharedPrefsService,
+  })  : _fs = firestoreService ?? FirestoreService(),
+        _prefs = sharedPrefsService ?? SharedPrefsService() {
+    _init();
+  }
+
+  Future<void> _init() async {
     savedIds = await _prefs.loadSavedJobs();
+    notifyListeners();
   }
 
   Future<void> toggleFavorite(String jobId) async {
@@ -21,6 +31,7 @@ class HomeController {
       savedIds.add(jobId);
     }
     await _prefs.saveJobs(savedIds);
+    notifyListeners();
   }
 
   Stream<List<Job>> get jobsStream {
@@ -42,5 +53,6 @@ class HomeController {
     selectedFilter = f;
     filters.removeAt(index);
     filters.insert(0, f);
+    notifyListeners();
   }
 }
