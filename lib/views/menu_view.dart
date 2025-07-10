@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intrezo/views/faq_view.dart';
 import 'package:provider/provider.dart';
 
 import 'package:intrezo/views/about_view.dart';
@@ -59,15 +60,17 @@ class MenuView extends StatelessWidget {
                     break;
                   case 'Settings':
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const SettingsView())
+                      MaterialPageRoute(builder: (_) => const SettingsView()),
                     );
                     break;
                 // case 'Document templates':
                 //   Navigator.of(context).push(/* … */);
                 //   break;
-                // case 'FAQ':
-                //   Navigator.of(context).push(/* … */);
-                //   break;
+                 case 'FAQ':
+                   Navigator.of(context).push(
+                     MaterialPageRoute(builder: (_) => const FaqView()),
+                   );
+                   break;
                 }
               },
             );

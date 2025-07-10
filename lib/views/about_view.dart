@@ -7,9 +7,7 @@ class AboutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // общий фон бежевый
       backgroundColor: const Color(0xFFD8D3CD),
-      // AppBar как на макете
       appBar: AppBar(
         backgroundColor: const Color(0xFF001A31),
         elevation: 0,

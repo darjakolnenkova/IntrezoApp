@@ -1,3 +1,5 @@
+// lib/views/contact_view.dart
+
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,14 +17,14 @@ class ContactView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Блюр-контейнер
+          // Блюр-контейнер с контактами
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: Colors.white.withOpacity(0.7),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 padding: const EdgeInsets.all(24),
@@ -120,21 +122,25 @@ class ContactView extends StatelessWidget {
               ),
             ),
           ),
+
           const SizedBox(height: 24),
 
-          // Кнопки мессенджеров
+          // Первая строка: WhatsApp и Viber
           Row(
             children: [
+              // WhatsApp
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: ctl.openWhatsApp,
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    side: const BorderSide(color: Color(0xFF1FCB4F), width: 2),
+                    side:
+                    const BorderSide(color: Color(0xFF1FCB4F), width: 2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 16),
                   ),
                   icon: Image.asset(
                     'assets/images/whatsapp.png',
@@ -144,42 +150,43 @@ class ContactView extends StatelessWidget {
                   label: Align(
                     alignment: Alignment.centerLeft,
                     child: Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'WhatsApp\n',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
+                      TextSpan(children: [
+                        const TextSpan(
+                          text: 'WhatsApp\n',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
                           ),
-                          TextSpan(
-                            text: 'Click to chat',
-                            style: TextStyle(
-                              color: Color(0xFF1FCB4F),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
+                        ),
+                        TextSpan(
+                          text: 'Click to chat',
+                          style: TextStyle(
+                            color: Color(0xFF1FCB4F),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
                           ),
-                        ],
-                      ),
+                        ),
+                      ]),
                       textAlign: TextAlign.start,
                     ),
                   ),
                 ),
               ),
               const SizedBox(width: 16),
+              // Viber
               Expanded(
                 child: OutlinedButton.icon(
                   onPressed: ctl.openViber,
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    side: const BorderSide(color: Color(0xFF6655D0), width: 2),
+                    side:
+                    const BorderSide(color: Color(0xFF6655D0), width: 2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 16),
                   ),
                   icon: Image.asset(
                     'assets/images/viber.png',
@@ -189,26 +196,24 @@ class ContactView extends StatelessWidget {
                   label: Align(
                     alignment: Alignment.centerLeft,
                     child: Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Viber\n',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
+                      TextSpan(children: [
+                        const TextSpan(
+                          text: 'Viber\n',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
                           ),
-                          TextSpan(
-                            text: 'Click to chat',
-                            style: TextStyle(
-                              color: Color(0xFF6655D0),
-                              fontWeight: FontWeight.bold,
-                              fontSize: 12,
-                            ),
+                        ),
+                        TextSpan(
+                          text: 'Click to chat',
+                          style: TextStyle(
+                            color: Color(0xFF6655D0),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
                           ),
-                        ],
-                      ),
+                        ),
+                      ]),
                       textAlign: TextAlign.start,
                     ),
                   ),
@@ -216,6 +221,60 @@ class ContactView extends StatelessWidget {
               ),
             ],
           ),
+
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              // Telegram
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: ctl.openTelegram,
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    side: const BorderSide(color: Color(0xFF2AABEE), width: 2),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 12, horizontal: 16),
+                  ),
+                  icon: Image.asset(
+                    'assets/images/telegram.png',
+                    width: 24,
+                    height: 24,
+                  ),
+                  label: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text.rich(
+                      TextSpan(children: [
+                        const TextSpan(
+                          text: 'Telegram\n',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                        TextSpan(
+                          text: 'Click to chat',
+                          style: TextStyle(
+                            color: Color(0xFF2AABEE),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ]),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 16),
+              // Пустое место вместо второй кнопки
+              const Expanded(child: SizedBox()),
+            ],
+          ),
+
         ],
       ),
     );

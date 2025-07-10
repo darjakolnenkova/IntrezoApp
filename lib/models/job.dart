@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Модель вакансии
 class Job {
   final String id;
   final String title;
@@ -11,7 +12,7 @@ class Job {
   final DateTime createdAt;
   final String imageUrl;
 
-  Job({
+  const Job({
     required this.id,
     required this.title,
     required this.company,
@@ -23,8 +24,19 @@ class Job {
     required this.imageUrl,
   });
 
+  /// Создаёт Job из документа Firestore, поддерживая и Timestamp, и String
   factory Job.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data()!;
+    final raw = data['createdAt'];
+    DateTime created;
+    if (raw is Timestamp) {
+      created = raw.toDate();
+    } else if (raw is String) {
+      created = DateTime.tryParse(raw) ?? DateTime.now();
+    } else {
+      created = DateTime.now();
+    }
+
     return Job(
       id: doc.id,
       title: data['title'] as String? ?? '',
@@ -33,8 +45,22 @@ class Job {
       tags: List<String>.from(data['tags'] as List? ?? []),
       salary: data['salary']?.toString() ?? '',
       currency: data['currency'] as String? ?? '€',
-      createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      createdAt: created,
       imageUrl: data['imageUrl'] as String? ?? '',
     );
+  }
+
+  /// Преобразует в карту для JobCard
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'company': company,
+      'location': location,
+      'tags': tags,
+      'salary': salary,
+      'currency': currency,
+      'createdAt': createdAt.toIso8601String(),
+      'imageUrl': imageUrl,
+    };
   }
 }

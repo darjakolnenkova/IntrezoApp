@@ -20,6 +20,8 @@ dependencies:
   provider: ^6.0.5
   url_launcher: ^6.1.7
   share_plus: ^11.0.0
+  firebase_messaging: ^14.2.3
+  carousel_slider: ^5.1.1
 
 
   cupertino_icons: ^1.0.8
@@ -47,3 +49,4 @@ flutter:
     - assets/images/whatsapp.png
     - assets/images/viber.png
     - assets/images/about.png
+    - assets/images/telegram.png

@@ -11,6 +11,7 @@ class ContactController extends ChangeNotifier {
     workingHours: 'Monday – Friday\n9 am – 5 pm',
     whatsAppNumber: '+372 5683 6668',
     viberNumber: '+372 5683 6668',
+    telegramUsername: 'Intrezo_hr',
   );
 
   Future<void> _launch(Uri uri) async {
@@ -52,5 +53,11 @@ class ContactController extends ChangeNotifier {
       final fallback = Uri.parse('https://invite.viber.com/?number=37256934644');
       await _launch(fallback);
     }
+  }
+
+  Future<void> openTelegram() async {
+    final username = info.telegramUsername;
+    final uri = Uri.parse('https://t.me/Intrezo_hr');
+    await _launch(uri);
   }
 }

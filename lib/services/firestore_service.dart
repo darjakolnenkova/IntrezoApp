@@ -2,17 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/job.dart';
 
 class FirestoreService {
-  final _jobs = FirebaseFirestore.instance.collection('jobs');
+  final _col = FirebaseFirestore.instance.collection('jobs');
 
+  /// Возвращает Stream<List<Job>> с учётом сортировки
   Stream<List<Job>> getJobs({
-    String orderBy = 'createdAt',
-    bool descending = true,
+    required String orderBy,
+    required bool descending,
   }) {
-    return _jobs
+    return _col
         .orderBy(orderBy, descending: descending)
         .snapshots()
         .map((snap) =>
-        snap.docs.map((doc) => Job.fromDoc(doc)).toList()
+    // Преобразуем каждый DocumentSnapshot в Job через фабрику
+    snap.docs.map((doc) => Job.fromDoc(doc)).toList()
     );
   }
 }

@@ -3,12 +3,18 @@ import '../services/firestore_service.dart';
 import '../services/shared_prefs_service.dart';
 import '../models/job.dart';
 
+/// Варианты фильтрации
+enum FilterOption { newest, oldest }
+
+extension FilterOptionExt on FilterOption {
+  String get label => this == FilterOption.oldest ? 'Oldest' : 'Newest';
+}
+
 class HomeController extends ChangeNotifier {
   final FirestoreService _fs;
   final SharedPrefsService _prefs;
 
-  List<String> filters = ['Newest', 'Oldest', 'Salary ↑', 'Salary ↓'];
-  String selectedFilter = 'Newest';
+  FilterOption selectedFilter = FilterOption.newest;
   Set<String> savedIds = {};
 
   HomeController({
@@ -25,34 +31,27 @@ class HomeController extends ChangeNotifier {
   }
 
   Future<void> toggleFavorite(String jobId) async {
-    if (savedIds.contains(jobId)) {
-      savedIds.remove(jobId);
-    } else {
-      savedIds.add(jobId);
-    }
+    if (!savedIds.remove(jobId)) savedIds.add(jobId);
     await _prefs.saveJobs(savedIds);
     notifyListeners();
   }
 
+  /// Возвращает Stream списка Job прямо из сервиса
   Stream<List<Job>> get jobsStream {
     switch (selectedFilter) {
-      case 'Oldest':
+      case FilterOption.oldest:
         return _fs.getJobs(orderBy: 'createdAt', descending: false);
-      case 'Salary ↑':
-        return _fs.getJobs(orderBy: 'salary', descending: false);
-      case 'Salary ↓':
-        return _fs.getJobs(orderBy: 'salary', descending: true);
-      case 'Newest':
+      case FilterOption.newest:
       default:
         return _fs.getJobs(orderBy: 'createdAt', descending: true);
     }
   }
 
-  void selectFilter(int index) {
-    final f = filters[index];
-    selectedFilter = f;
-    filters.removeAt(index);
-    filters.insert(0, f);
-    notifyListeners();
+  /// Переключение фильтра
+  void selectFilter(FilterOption option) {
+    if (option != selectedFilter) {
+      selectedFilter = option;
+      notifyListeners();
+    }
   }
 }

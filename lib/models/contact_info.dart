@@ -5,6 +5,7 @@ class ContactInfo {
   final String workingHours;
   final String whatsAppNumber;
   final String viberNumber;
+  final String telegramUsername;
 
   const ContactInfo({
     required this.address,
@@ -13,5 +14,6 @@ class ContactInfo {
     required this.workingHours,
     required this.whatsAppNumber,
     required this.viberNumber,
+    required this.telegramUsername,
   });
 }
