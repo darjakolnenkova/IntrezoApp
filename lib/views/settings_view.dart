@@ -4,10 +4,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/settings_controller.dart';
 import '../controllers/saved_jobs_controller.dart';
-import 'contact_view.dart';
 
 class SettingsView extends StatelessWidget {
-  const SettingsView({Key? key}) : super(key: key);
+  const SettingsView({super.key});
 
   Future<void> _openUrl(String url) async {
     final uri = Uri.parse(url);
@@ -41,8 +40,12 @@ class SettingsView extends StatelessWidget {
 
     if (yes == true) {
       await ctrl.clearAll();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('All favorites removed')));
+
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('All favorites removed')),
+      );
     }
   }
 
@@ -57,7 +60,6 @@ class SettingsView extends StatelessWidget {
     );
   }
 
-  /// Добавили iconColor: чтобы можно было менять цвет иконки
   Widget _buildCard({
     required IconData icon,
     required String title,

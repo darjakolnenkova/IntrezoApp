@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/saved_jobs_controller.dart';
 import '../widgets/job_card.dart';
+import 'vacancy_view.dart'; // добавлен импорт
 
 class SavedView extends StatelessWidget {
   const SavedView({super.key});
@@ -18,7 +19,7 @@ class SavedView extends StatelessWidget {
       body: savedIds.isEmpty
           ? _buildEmptyState()
           : Padding(
-        padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
         child: ListView.builder(
           key: const PageStorageKey('savedList'),
           padding: const EdgeInsets.only(bottom: 50),
@@ -40,9 +41,19 @@ class SavedView extends StatelessWidget {
                 final data = snap.data!.data()!;
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16),
-                  child: JobCard(
-                    jobData: data,
-                    jobId: jobId,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              VacancyView(vacancyId: jobId),
+                        ),
+                      );
+                    },
+                    child: JobCard(
+                      jobData: data,
+                      jobId: jobId,
+                    ),
                   ),
                 );
               },

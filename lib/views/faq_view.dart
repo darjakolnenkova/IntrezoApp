@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../controllers/faq_controller.dart';
 
 class FaqView extends StatelessWidget {
-  const FaqView({Key? key}) : super(key: key);
+  const FaqView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +49,10 @@ class FaqView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  // Список FAQ-карточек
                   ...List.generate(ctl.items.length, (i) {
                     final item = ctl.items[i];
                     return Card(
+                      color: Colors.white,
                       margin: const EdgeInsets.only(bottom: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),

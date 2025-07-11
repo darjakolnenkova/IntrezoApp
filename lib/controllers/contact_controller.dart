@@ -3,7 +3,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../models/contact_info.dart';
 
 class ContactController extends ChangeNotifier {
-  /// Единственный экземпляр с «жёстко прописанной» инфо
   final ContactInfo info = const ContactInfo(
     address: 'Lelle tn 24, Tallinn Harjumaa 11318',
     email: 'info@intrezo.ee',
@@ -22,42 +21,37 @@ class ContactController extends ChangeNotifier {
     }
   }
 
-  /// Почта
   Future<void> openEmail() async {
     final uri = Uri(scheme: 'mailto', path: info.email);
     await _launch(uri);
   }
 
-  /// Звонок по номеру
   Future<void> openPhone(String phone) async {
     final digits = phone.replaceAll(RegExp(r'\D'), '');
     final uri = Uri(scheme: 'tel', path: digits);
     await _launch(uri);
   }
 
-  /// WhatsApp
   Future<void> openWhatsApp() async {
     final digits = info.whatsAppNumber.replaceAll(RegExp(r'\D'), '');
-    final uri = Uri.parse('https://api.whatsapp.com/send?phone=37256394644');
+    final uri = Uri.parse('https://api.whatsapp.com/send?phone=$digits');
     await _launch(uri);
   }
 
-  /// Viber
   Future<void> openViber() async {
     final digits = info.viberNumber.replaceAll(RegExp(r'\D'), '');
     final uri = Uri.parse('viber://chat?number=$digits');
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      // fallback на веб-ссылку
-      final fallback = Uri.parse('https://invite.viber.com/?number=37256934644');
+      final fallback = Uri.parse('https://invite.viber.com/?number=$digits');
       await _launch(fallback);
     }
   }
 
   Future<void> openTelegram() async {
     final username = info.telegramUsername;
-    final uri = Uri.parse('https://t.me/Intrezo_hr');
+    final uri = Uri.parse('https://t.me/$username');
     await _launch(uri);
   }
 }

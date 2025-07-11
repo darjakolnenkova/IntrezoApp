@@ -67,14 +67,13 @@ class HomeView extends StatelessWidget {
               ),
             ),
           ),
-          // Ваш компактный фильтр рядом с заголовком
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Color(0xFF001A31).withOpacity(0.3),
+                  color: Color(0xFF001A31).withValues(alpha: 0.3),
                   blurRadius: 4,
                   offset: const Offset(0, 2),
                 ),

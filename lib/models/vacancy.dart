@@ -1,5 +1,3 @@
-// lib/models/vacancy.dart
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Vacancy {
@@ -7,13 +5,13 @@ class Vacancy {
   final String title;
   final String company;
   final String location;
-  final List<String> imageUrls;       // для Carousel
-  final String employmentType;        // например, "Full time"
-  final String salary;                // например, "1900–4300€"
-  final String description;           // полное описание вакансии
-  final List<String> requirements;    // список пунктов
-  final List<String> offers;          // список пунктов
-  final DateTime? postedAt;
+  final List<String> imageUrls;
+  final String employmentType;
+  final String salary;
+  final String description;
+  final List<String> requirements;
+  final List<String> offers;
+  final DateTime? createdAt;
   final DateTime? expiresAt;
 
   Vacancy({
@@ -27,13 +25,13 @@ class Vacancy {
     required this.description,
     required this.requirements,
     required this.offers,
-    this.postedAt,
+    this.createdAt,
     this.expiresAt,
   });
 
   factory Vacancy.fromDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data()!;
-    final Timestamp? postTs = data['postedAt'] as Timestamp?;
+    final Timestamp? postTs = data['createdAt'] as Timestamp?;
     final Timestamp? expTs  = data['expiresAt'] as Timestamp?;
     return Vacancy(
       id: doc.id,
@@ -46,7 +44,7 @@ class Vacancy {
       employmentType: data['employmentType'] as String? ?? '',
       salary:         data['salary']         as String? ?? '',
       imageUrls:      List<String>.from(data['imageUrls']      as List<dynamic>? ?? []),
-      postedAt: postTs?.toDate(),
+      createdAt: postTs?.toDate(),
       expiresAt: expTs?.toDate(),
     );
   }

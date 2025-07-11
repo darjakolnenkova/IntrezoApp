@@ -1,12 +1,10 @@
-// lib/views/contact_view.dart
-
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../controllers/contact_controller.dart';
 
 class ContactView extends StatelessWidget {
-  const ContactView({Key? key}) : super(key: key);
+  const ContactView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +22,7 @@ class ContactView extends StatelessWidget {
               filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.7),
+                  color: Colors.white.withValues(alpha: 0.7),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 padding: const EdgeInsets.all(24),

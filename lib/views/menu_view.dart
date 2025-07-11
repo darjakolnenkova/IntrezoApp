@@ -7,7 +7,7 @@ import 'package:intrezo/controllers/invite_controller.dart';
 import 'package:intrezo/views/settings_view.dart';
 
 class MenuView extends StatelessWidget {
-  const MenuView({Key? key}) : super(key: key);
+  const MenuView({super.key});
 
   static const _menuItems = <_MenuItem>[
     _MenuItem(
@@ -34,7 +34,6 @@ class MenuView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Забираем контроллер один раз на весь экран
     final inviteCtl = context.read<InviteController>();
 
     return Scaffold(
@@ -92,10 +91,9 @@ class _MenuTile extends StatelessWidget {
   final VoidCallback onTap;
 
   const _MenuTile({
-    Key? key,
     required this.item,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,3 @@
-// lib/controllers/vacancy_controller.dart
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import '../models/vacancy.dart';
@@ -38,7 +36,6 @@ class VacancyController extends ChangeNotifier {
     }
   }
 
-  /// Здесь мы больше не зовём toggleFavorite, а правильно — toggle
   Future<void> toggleFavorite() async {
     await savedJobsCtrl.toggle(vacancyId);
     isSaved = savedJobsCtrl.savedIds.contains(vacancyId);
